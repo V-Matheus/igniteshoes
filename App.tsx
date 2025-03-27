@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native';
+import { StatusBar, Platform } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 import {
   useFonts,
@@ -13,11 +13,18 @@ import { Loading } from './src/components/Loading';
 
 import { CartContextProvider } from './src/contexts/CartContext';
 import { OneSignal } from 'react-native-onesignal';
+import { tagUserInfoCreate } from './src/notifications/notificationsTags';
 
-OneSignal.initialize('ecedc784-f334-42fb-9be5-b5afc94af3e9');
+const oneSignalAppId =
+  Platform.OS === 'ios' ? 'iosID' : 'ecedc784-f334-42fb-9be5-b5afc94af3e9';
+
+OneSignal.initialize(oneSignalAppId);
+OneSignal.Notifications.requestPermission(true);
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
+
+  tagUserInfoCreate()
 
   return (
     <NativeBaseProvider theme={THEME}>
